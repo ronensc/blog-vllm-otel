@@ -1,0 +1,55 @@
+services:
+  router:
+    image: quay.io/wxpe/text-gen-router:main.87b9dfd
+    environment:
+      - OTEL_SERVICE_NAME=vllm-router
+    ports:
+      - "8033:8033"
+    volumes:
+      - ./model_map.yaml:/app/model_map.yaml
+    command: [
+      "fmaas-router",
+      "--grpc-port", "8033",
+      "--otlp-endpoint", "${INSTANA_AGENT_ADDRESS}",
+      "--model-map-config", "/app/model_map.yaml"
+    ]
+  opt-125m:
+    image: quay.io/opendatahub/vllm:fast-ibm-0cd0aad
+    environment:
+      - HF_HUB_OFFLINE=0
+      - OTEL_EXPORTER_OTLP_TRACES_INSECURE=true
+      - OTEL_SERVICE_NAME=vllm-opt-125m
+    command: [
+      "--model", "facebook/opt-125m",
+      "--otlp-traces-endpoint", "${INSTANA_AGENT_ADDRESS}",
+      "--grpc-port", "8033",
+      "--gpu-memory-utilization", "0.45",
+    ]
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+  gpt2:
+    image: quay.io/opendatahub/vllm:fast-ibm-0cd0aad
+    environment:
+      - HF_HUB_OFFLINE=0
+      - OTEL_EXPORTER_OTLP_TRACES_INSECURE=true
+      - OTEL_SERVICE_NAME=vllm-gpt2
+    command: [
+      "--model", "gpt2",
+      "--otlp-traces-endpoint", "${INSTANA_AGENT_ADDRESS}",
+      "--grpc-port", "8033",
+      "--gpu-memory-utilization", "0.45",
+    ]
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
