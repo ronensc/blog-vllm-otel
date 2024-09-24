@@ -1,6 +1,6 @@
 # vLLM with OpenTelemetry Integration Guide
 
-This repository accompanies the blog post ["Follow the Trail: Supercharging vLLM with OpenTelemetry Distributed Tracing"](TODO:link-to-blog). It provides code, configuration, and examples to demonstrate how to integrate OpenTelemetry distributed tracing with vLLM for improved performance insights and debugging.
+This repository accompanies the blog post ["Follow the Trail: Supercharging vLLM with OpenTelemetry Distributed Tracing"](https://medium.com/@ronen.schaffer/follow-the-trail-supercharging-vllm-with-opentelemetry-distributed-tracing-aa655229b46f). It provides code, configuration, and examples to demonstrate how to integrate OpenTelemetry distributed tracing with vLLM for improved performance insights and debugging.
 
 
 
